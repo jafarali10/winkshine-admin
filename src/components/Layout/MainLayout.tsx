@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Box, CssBaseline, Toolbar } from '@mui/material';
 import Sidebar from './Sidebar';
 import Header from './Header';
 
@@ -15,25 +14,21 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
+    <div className="d-flex">
       <Header onMenuClick={handleDrawerToggle} />
       <Sidebar open={mobileOpen} onClose={handleDrawerToggle} />
       
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - 240px)` },
-          backgroundColor: '#f5f5f5',
-          minHeight: '100vh',
-        }}
-      >
-        <Toolbar />
+      <main className="flex-grow-1"
+            style={{
+              marginLeft: '280px',
+              marginTop: '70px',
+              backgroundColor: '#f8f9fa',
+              minHeight: 'calc(100vh - 70px)',
+              padding: '1.5rem'
+            }}>
         {children}
-      </Box>
-    </Box>
+      </main>
+    </div>
   );
 };
 

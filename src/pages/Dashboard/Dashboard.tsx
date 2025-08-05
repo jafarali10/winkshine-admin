@@ -1,29 +1,7 @@
 import React from 'react';
 import {
-  Grid,
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Chip,
-  Avatar,
-  LinearProgress,
-  Divider,
-} from '@mui/material';
-import {
   People as PeopleIcon,
-  BookOnline as BookingsIcon,
   AttachMoney as RevenueIcon,
-  Pending as PendingIcon,
-  CheckCircle as CompletedIcon,
-  Cancel as CancelledIcon,
   TrendingUp as TrendingUpIcon,
   LocalCarWash as CarWashIcon,
   Star as StarIcon,
@@ -37,388 +15,191 @@ interface StatCardProps {
   color: string;
   trend?: string;
   trendValue?: string;
+  variant?: 'users' | 'revenue' | 'satisfaction' | 'orders';
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend, trendValue }) => (
-  <Card 
-    sx={{ 
-      height: '100%',
-      background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
-      border: '1px solid #e0e0e0',
-      borderRadius: 3,
-      transition: 'all 0.3s ease',
-      '&:hover': {
-        transform: 'translateY(-4px)',
-        boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-      },
-    }}
-  >
-    <CardContent sx={{ p: 3 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-        <Box>
-          <Typography color="textSecondary" gutterBottom variant="h6" sx={{ fontWeight: 500 }}>
-            {title}
-          </Typography>
-          <Typography variant="h3" component="div" sx={{ fontWeight: 'bold', color: color }}>
-            {value}
-          </Typography>
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend, trendValue, variant = 'users' }) => (
+  <div className="card h-100 border-0 shadow-custom">
+    <div className="card-body p-4">
+      <div className="d-flex align-items-center justify-content-between">
+        <div className="flex-grow-1">
+          <h6 className="text-muted mb-2 fw-semibold">{title}</h6>
+          <h2 className="fw-bold mb-2" style={{ color: color }}>{value}</h2>
           {trend && (
-            <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-              <TrendingUpIcon sx={{ fontSize: 16, color: '#4caf50', mr: 0.5 }} />
-              <Typography variant="body2" sx={{ color: '#4caf50', fontWeight: 500 }}>
+            <div className="d-flex align-items-center">
+              <TrendingUpIcon style={{ fontSize: '1rem', color: '#4caf50', marginRight: '0.25rem' }} />
+              <small className="text-success fw-semibold">
                 {trendValue} {trend}
-              </Typography>
-            </Box>
+              </small>
+            </div>
           )}
-        </Box>
-        <Box
-          sx={{
-            backgroundColor: color,
-            borderRadius: '50%',
-            p: 2,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: `0 4px 15px ${color}40`,
-          }}
-        >
-          {icon}
-        </Box>
-      </Box>
-    </CardContent>
-  </Card>
+        </div>
+        <div className="d-flex align-items-center justify-content-center rounded-circle"
+             style={{
+               backgroundColor: color,
+               width: '60px',
+               height: '60px',
+               boxShadow: `0 4px 15px ${color}40`
+             }}>
+          <div style={{ color: 'white', fontSize: '1.75rem' }}>
+            {icon}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 );
 
 const Dashboard: React.FC = () => {
   // Mock data - replace with actual API call
   const stats: DashboardStats = {
     totalUsers: 1250,
-    totalBookings: 3420,
     totalRevenue: 45600,
-    pendingBookings: 45,
-    completedBookings: 2890,
-    cancelledBookings: 485,
     monthlyStats: [],
-    recentBookings: [],
-    topServices: [],
     customerSatisfaction: 4.5,
   };
 
-  const recentBookings = [
-    {
-      id: '1',
-      customer: 'John Doe',
-      service: 'Premium Wash',
-      date: '2024-01-15',
-      status: 'completed',
-      amount: 45,
-      avatar: 'JD',
-    },
-    {
-      id: '2',
-      customer: 'Jane Smith',
-      service: 'Basic Wash',
-      date: '2024-01-15',
-      status: 'pending',
-      amount: 25,
-      avatar: 'JS',
-    },
-    {
-      id: '3',
-      customer: 'Mike Johnson',
-      service: 'Luxury Detail',
-      date: '2024-01-14',
-      status: 'completed',
-      amount: 120,
-      avatar: 'MJ',
-    },
-    {
-      id: '4',
-      customer: 'Sarah Wilson',
-      service: 'Premium Wash',
-      date: '2024-01-14',
-      status: 'in-progress',
-      amount: 45,
-      avatar: 'SW',
-    },
-  ];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return '#4caf50';
-      case 'pending':
-        return '#ff9800';
-      case 'in-progress':
-        return '#2196f3';
-      case 'cancelled':
-        return '#f44336';
-      default:
-        return '#757575';
-    }
-  };
-
-  const getStatusIcon = (status: string): React.ReactElement | undefined => {
-    switch (status) {
-      case 'completed':
-        return <CompletedIcon sx={{ fontSize: 16 }} />;
-      case 'pending':
-        return <PendingIcon sx={{ fontSize: 16 }} />;
-      case 'in-progress':
-        return <CarWashIcon sx={{ fontSize: 16 }} />;
-      case 'cancelled':
-        return <CancelledIcon sx={{ fontSize: 16 }} />;
-      default:
-        return undefined;
-    }
-  };
-
   return (
-    <Box sx={{ p: 0 }}>
+    <div className="container-fluid p-4">
       {/* Header */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: '#1a237e', mb: 1 }}>
-          Welcome back, Admin! 👋
-        </Typography>
-        <Typography variant="body1" color="textSecondary">
-          Here's what's happening with your car wash business today
-        </Typography>
-      </Box>
+      <div className="row mb-4">
+        <div className="col-12">
+          <h1 className="h3 fw-bold text-primary mb-2">
+            Welcome back, Admin! 👋
+          </h1>
+          <p className="text-muted mb-0">
+            Here's what's happening with your car wash business today
+          </p>
+        </div>
+      </div>
 
-      {/* Statistics Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+      {/* Stats Cards */}
+      <div className="row g-4 mb-4">
+        <div className="col-12 col-sm-6 col-lg-3">
           <StatCard
             title="Total Users"
             value={stats.totalUsers.toLocaleString()}
-            icon={<PeopleIcon sx={{ color: 'white', fontSize: 28 }} />}
+            icon={<PeopleIcon />}
             color="#2196f3"
             trend="from last month"
             trendValue="+12%"
+            variant="users"
           />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard
-            title="Total Bookings"
-            value={stats.totalBookings.toLocaleString()}
-            icon={<BookingsIcon sx={{ color: 'white', fontSize: 28 }} />}
-            color="#4caf50"
-            trend="this week"
-            trendValue="+8%"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </div>
+
+        <div className="col-12 col-sm-6 col-lg-3">
           <StatCard
             title="Total Revenue"
             value={`$${stats.totalRevenue.toLocaleString()}`}
-            icon={<RevenueIcon sx={{ color: 'white', fontSize: 28 }} />}
-            color="#ff9800"
-            trend="this month"
-            trendValue="+15%"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard
-            title="Pending Bookings"
-            value={stats.pendingBookings}
-            icon={<PendingIcon sx={{ color: 'white', fontSize: 28 }} />}
-            color="#f44336"
-          />
-        </Grid>
-      </Grid>
-
-      {/* Additional Stats */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard
-            title="Completed"
-            value={stats.completedBookings.toLocaleString()}
-            icon={<CompletedIcon sx={{ color: 'white', fontSize: 28 }} />}
+            icon={<RevenueIcon />}
             color="#4caf50"
+            trend="from last month"
+            trendValue="+8%"
+            variant="revenue"
           />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard
-            title="Cancelled"
-            value={stats.cancelledBookings.toLocaleString()}
-            icon={<CancelledIcon sx={{ color: 'white', fontSize: 28 }} />}
-            color="#f44336"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </div>
+
+        <div className="col-12 col-sm-6 col-lg-3">
           <StatCard
             title="Customer Satisfaction"
-            value={`${stats.customerSatisfaction}/5`}
-            icon={<StarIcon sx={{ color: 'white', fontSize: 28 }} />}
-            color="#9c27b0"
+            value={stats.customerSatisfaction}
+            icon={<StarIcon />}
+            color="#ff9800"
+            trend="from last month"
+            trendValue="+0.2"
+            variant="satisfaction"
           />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </div>
+
+        <div className="col-12 col-sm-6 col-lg-3">
           <StatCard
-            title="Today's Bookings"
-            value="12"
-            icon={<BookingsIcon sx={{ color: 'white', fontSize: 28 }} />}
-            color="#00bcd4"
+            title="Total Orders"
+            value="1,847"
+            icon={<CarWashIcon />}
+            color="#9c27b0"
+            trend="from last month"
+            trendValue="+15%"
+            variant="orders"
           />
-        </Grid>
-      </Grid>
+        </div>
+      </div>
 
-      {/* Recent Bookings Table */}
-      <Paper 
-        sx={{ 
-          width: '100%', 
-          overflow: 'hidden',
-          borderRadius: 3,
-          border: '1px solid #e0e0e0',
-        }}
-      >
-        <Box sx={{ p: 3, backgroundColor: '#f8f9fa', borderBottom: '1px solid #e0e0e0' }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#1a237e' }}>
-            Recent Bookings
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Latest customer bookings and their status
-          </Typography>
-        </Box>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow sx={{ backgroundColor: '#fafafa' }}>
-                <TableCell sx={{ fontWeight: 'bold' }}>Customer</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Service</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Date</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 'bold' }}>Amount</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {recentBookings.map((booking) => (
-                <TableRow key={booking.id} hover sx={{ '&:hover': { backgroundColor: '#f5f5f5' } }}>
-                  <TableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Avatar 
-                        sx={{ 
-                          width: 32, 
-                          height: 32, 
-                          mr: 2,
-                          backgroundColor: '#1a237e',
-                          fontSize: '0.875rem',
-                        }}
-                      >
-                        {booking.avatar}
-                      </Avatar>
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        {booking.customer}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2" color="textSecondary">
-                      {booking.service}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2" color="textSecondary">
-                      {booking.date}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      icon={getStatusIcon(booking.status)}
-                      label={booking.status}
-                      size="small"
-                      sx={{
-                        backgroundColor: getStatusColor(booking.status),
-                        color: 'white',
-                        fontWeight: 500,
-                        textTransform: 'capitalize',
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography variant="body2" sx={{ fontWeight: 'bold', color: '#1a237e' }}>
-                      ${booking.amount}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+      {/* Additional Dashboard Content */}
+      <div className="row g-4">
+        <div className="col-12 col-lg-8">
+          <div className="card border-0 shadow-custom">
+            <div className="card-header">
+              <h5 className="card-title mb-0 text-white">Recent Activity</h5>
+            </div>
+            <div className="card-body">
+              <div className="d-flex align-items-center mb-3">
+                <div className="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3"
+                     style={{ width: '40px', height: '40px' }}>
+                  <PeopleIcon style={{ color: 'white', fontSize: '1.2rem' }} />
+                </div>
+                <div className="flex-grow-1">
+                  <h6 className="mb-1">New user registered</h6>
+                  <small className="text-muted">John Doe joined the platform</small>
+                </div>
+                <small className="text-muted">2 min ago</small>
+              </div>
+              
+              <div className="d-flex align-items-center mb-3">
+                <div className="bg-success rounded-circle d-flex align-items-center justify-content-center me-3"
+                     style={{ width: '40px', height: '40px' }}>
+                  <RevenueIcon style={{ color: 'white', fontSize: '1.2rem' }} />
+                </div>
+                <div className="flex-grow-1">
+                  <h6 className="mb-1">New order completed</h6>
+                  <small className="text-muted">Premium car wash service</small>
+                </div>
+                <small className="text-muted">15 min ago</small>
+              </div>
+              
+              <div className="d-flex align-items-center">
+                <div className="bg-warning rounded-circle d-flex align-items-center justify-content-center me-3"
+                     style={{ width: '40px', height: '40px' }}>
+                  <StarIcon style={{ color: 'white', fontSize: '1.2rem' }} />
+                </div>
+                <div className="flex-grow-1">
+                  <h6 className="mb-1">New review received</h6>
+                  <small className="text-muted">5-star rating from customer</small>
+                </div>
+                <small className="text-muted">1 hour ago</small>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      {/* Quick Stats Row */}
-      <Grid container spacing={3} sx={{ mt: 3 }}>
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3, borderRadius: 3, border: '1px solid #e0e0e0' }}>
-            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, color: '#1a237e' }}>
-              Weekly Progress
-            </Typography>
-            <Box sx={{ mb: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body2">Bookings Target</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>85%</Typography>
-              </Box>
-              <LinearProgress 
-                variant="determinate" 
-                value={85} 
-                sx={{ 
-                  height: 8, 
-                  borderRadius: 4,
-                  backgroundColor: '#e0e0e0',
-                  '& .MuiLinearProgress-bar': {
-                    backgroundColor: '#4caf50',
-                    borderRadius: 4,
-                  },
-                }} 
-              />
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body2">Revenue Target</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>92%</Typography>
-              </Box>
-              <LinearProgress 
-                variant="determinate" 
-                value={92} 
-                sx={{ 
-                  height: 8, 
-                  borderRadius: 4,
-                  backgroundColor: '#e0e0e0',
-                  '& .MuiLinearProgress-bar': {
-                    backgroundColor: '#ff9800',
-                    borderRadius: 4,
-                  },
-                }} 
-              />
-            </Box>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3, borderRadius: 3, border: '1px solid #e0e0e0' }}>
-            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, color: '#1a237e' }}>
-              Today's Schedule
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#4caf50', mr: 2 }} />
-              <Typography variant="body2">9:00 AM - Premium Wash (John Doe)</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#ff9800', mr: 2 }} />
-              <Typography variant="body2">11:30 AM - Basic Wash (Jane Smith)</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#2196f3', mr: 2 }} />
-              <Typography variant="body2">2:00 PM - Luxury Detail (Mike Johnson)</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#9c27b0', mr: 2 }} />
-              <Typography variant="body2">4:30 PM - Premium Wash (Sarah Wilson)</Typography>
-            </Box>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
+        <div className="col-12 col-lg-4">
+          <div className="card border-0 shadow-custom">
+            <div className="card-header">
+              <h5 className="card-title mb-0 text-white">Quick Actions</h5>
+            </div>
+            <div className="card-body">
+              <div className="d-grid gap-2">
+                <button className="btn btn-outline-primary">
+                  <PeopleIcon className="me-2" />
+                  Add New User
+                </button>
+                <button className="btn btn-outline-success">
+                  <CarWashIcon className="me-2" />
+                  Create Order
+                </button>
+                <button className="btn btn-outline-info">
+                  <TrendingUpIcon className="me-2" />
+                  View Reports
+                </button>
+                <button className="btn btn-outline-warning">
+                  <StarIcon className="me-2" />
+                  Manage Reviews
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

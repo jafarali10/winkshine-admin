@@ -1,30 +1,12 @@
 import React from 'react';
 import {
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  Box,
-  Typography,
-  Avatar,
-  Chip,
-} from '@mui/material';
-import {
   Dashboard as DashboardIcon,
   People as PeopleIcon,
-  LocalCarWash as ServicesIcon,
-  BookOnline as BookingsIcon,
-  Star as ReviewsIcon,
   Settings as SettingsIcon,
   Logout as LogoutIcon,
   LocalCarWash as CarWashIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
-
-const drawerWidth = 280;
 
 interface SidebarProps {
   open: boolean;
@@ -43,24 +25,6 @@ const menuItems = [
     icon: <PeopleIcon />, 
     path: '/users',
     badge: '1.2K',
-  },
-  { 
-    text: 'Services', 
-    icon: <ServicesIcon />, 
-    path: '/services',
-    badge: '8',
-  },
-  { 
-    text: 'Bookings', 
-    icon: <BookingsIcon />, 
-    path: '/bookings',
-    badge: '45',
-  },
-  { 
-    text: 'Reviews', 
-    icon: <ReviewsIcon />, 
-    path: '/reviews',
-    badge: '156',
   },
   { 
     text: 'Settings', 
@@ -85,174 +49,138 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
   };
 
   return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: drawerWidth,
-          boxSizing: 'border-box',
-          background: 'linear-gradient(180deg, #1a237e 0%, #3949ab 100%)',
-          color: 'white',
-          border: 'none',
-          boxShadow: '4px 0 20px rgba(0,0,0,0.1)',
-        },
-      }}
-    >
-      {/* Header */}
-      <Box sx={{ p: 3, textAlign: 'center' }}>
-        <Box
-          sx={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 60,
-            height: 60,
-            borderRadius: '50%',
-            backgroundColor: 'rgba(255,255,255,0.2)',
-            backdropFilter: 'blur(10px)',
-            mb: 2,
-            border: '2px solid rgba(255,255,255,0.3)',
-          }}
-        >
-          <CarWashIcon sx={{ fontSize: 28, color: 'white' }} />
-        </Box>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-          Winkshine
-        </Typography>
-        <Typography variant="body2" sx={{ opacity: 0.8, fontSize: '0.75rem' }}>
-          Car Wash Admin
-        </Typography>
-      </Box>
+    <div className="d-none d-lg-block position-fixed top-0 start-0 h-100"
+         style={{
+           width: '280px',
+           background: 'linear-gradient(180deg, #1a237e 0%, #3949ab 100%)',
+           color: 'white',
+           zIndex: 1020,
+           boxShadow: '4px 0 20px rgba(0,0,0,0.1)'
+         }}>
       
-      <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.2)', mx: 2 }} />
+      {/* Header */}
+      <div className="text-center p-4">
+        <div className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
+             style={{
+               width: '60px',
+               height: '60px',
+               backgroundColor: 'rgba(255,255,255,0.2)',
+               backdropFilter: 'blur(10px)',
+               border: '2px solid rgba(255,255,255,0.3)'
+             }}>
+          <CarWashIcon style={{ fontSize: '1.75rem', color: 'white' }} />
+        </div>
+        <h6 className="fw-bold mb-1">Winkshine</h6>
+        <small style={{ opacity: 0.8, fontSize: '0.75rem' }}>Car Wash Admin</small>
+      </div>
+      
+      <hr style={{ backgroundColor: 'rgba(255,255,255,0.2)', margin: '0 1rem' }} />
       
       {/* Navigation Menu */}
-      <List sx={{ flexGrow: 1, px: 2, pt: 2 }}>
-        {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding sx={{ mb: 1 }}>
-            <ListItemButton
-              onClick={() => handleNavigation(item.path)}
-              selected={location.pathname === item.path}
-              sx={{
-                borderRadius: 2,
-                '&.Mui-selected': {
-                  backgroundColor: 'rgba(255,255,255,0.15)',
-                  backdropFilter: 'blur(10px)',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255,255,255,0.2)',
-                  },
-                  '& .MuiListItemIcon-root': {
-                    color: 'white',
-                  },
-                  '& .MuiListItemText-primary': {
-                    fontWeight: 'bold',
-                  },
-                },
-                '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  transform: 'translateX(4px)',
-                },
-                transition: 'all 0.3s ease',
-              }}
-            >
-              <ListItemIcon sx={{ 
-                color: 'rgba(255,255,255,0.8)', 
-                minWidth: 40,
-                transition: 'all 0.3s ease',
-              }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText 
-                primary={item.text} 
-                sx={{
-                  '& .MuiListItemText-primary': {
-                    fontSize: '0.9rem',
-                    fontWeight: 500,
-                  },
+      <div className="flex-grow-1 px-3 pt-3">
+        <ul className="nav flex-column">
+          {menuItems.map((item) => (
+            <li key={item.text} className="nav-item mb-2">
+              <button
+                className={`btn w-100 text-start border-0 rounded-3 ${
+                  location.pathname === item.path 
+                    ? 'text-white' 
+                    : 'text-white-50'
+                }`}
+                onClick={() => handleNavigation(item.path)}
+                style={{
+                  backgroundColor: location.pathname === item.path 
+                    ? 'rgba(255,255,255,0.15)' 
+                    : 'transparent',
+                  backdropFilter: location.pathname === item.path ? 'blur(10px)' : 'none',
+                  transition: 'all 0.3s ease'
                 }}
-              />
-              {item.badge && (
-                <Chip
-                  label={item.badge}
-                  size="small"
-                  sx={{
-                    backgroundColor: 'rgba(255,255,255,0.2)',
-                    color: 'white',
-                    fontSize: '0.7rem',
-                    height: 20,
-                    '& .MuiChip-label': {
-                      px: 1,
-                    },
-                  }}
-                />
-              )}
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+                onMouseEnter={(e) => {
+                  if (location.pathname !== item.path) {
+                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)';
+                    e.currentTarget.style.transform = 'translateX(4px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (location.pathname !== item.path) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.transform = 'translateX(0)';
+                  }
+                }}
+              >
+                <div className="d-flex align-items-center">
+                  <div className="me-3" style={{ minWidth: '40px' }}>
+                    {item.icon}
+                  </div>
+                  <span className="fw-medium" style={{ fontSize: '0.9rem' }}>
+                    {item.text}
+                  </span>
+                  {item.badge && (
+                    <span className="badge ms-auto"
+                          style={{
+                            backgroundColor: 'rgba(255,255,255,0.2)',
+                            fontSize: '0.7rem',
+                            height: '20px'
+                          }}>
+                      {item.badge}
+                    </span>
+                  )}
+                </div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
       
-      <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.2)', mx: 2 }} />
+      <hr style={{ backgroundColor: 'rgba(255,255,255,0.2)', margin: '0 1rem' }} />
       
       {/* User Profile */}
-      <Box sx={{ p: 2, mb: 2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-          <Avatar 
-            sx={{ 
-              width: 40, 
-              height: 40, 
-              mr: 2,
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              border: '2px solid rgba(255,255,255,0.3)',
-            }}
-          >
-            A
-          </Avatar>
-          <Box>
-            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              Admin User
-            </Typography>
-            <Typography variant="caption" sx={{ opacity: 0.8 }}>
-              Super Admin
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
+      <div className="p-3 mb-3">
+        <div className="d-flex align-items-center mb-3">
+          <div className="rounded-circle bg-white bg-opacity-20 d-flex align-items-center justify-content-center me-3"
+               style={{
+                 width: '40px',
+                 height: '40px',
+                 border: '2px solid rgba(255,255,255,0.3)'
+               }}>
+            <span className="fw-bold text-white">A</span>
+          </div>
+          <div>
+            <div className="fw-bold" style={{ fontSize: '0.875rem' }}>Admin User</div>
+            <small style={{ opacity: 0.8, fontSize: '0.75rem' }}>Super Admin</small>
+          </div>
+        </div>
+      </div>
       
       {/* Logout */}
-      <List sx={{ px: 2, pb: 2 }}>
-        <ListItem disablePadding>
-          <ListItemButton 
-            onClick={handleLogout}
-            sx={{
-              borderRadius: 2,
-              backgroundColor: 'rgba(244, 67, 54, 0.1)',
-              border: '1px solid rgba(244, 67, 54, 0.3)',
-              '&:hover': {
-                backgroundColor: 'rgba(244, 67, 54, 0.2)',
-                transform: 'translateX(4px)',
-              },
-              transition: 'all 0.3s ease',
-            }}
-          >
-            <ListItemIcon sx={{ color: '#f44336', minWidth: 40 }}>
+      <div className="px-3 pb-3">
+        <button
+          className="btn w-100 text-start border rounded-3"
+          onClick={handleLogout}
+          style={{
+            backgroundColor: 'rgba(244, 67, 54, 0.1)',
+            borderColor: 'rgba(244, 67, 54, 0.3)',
+            color: '#f44336',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(244, 67, 54, 0.2)';
+            e.currentTarget.style.transform = 'translateX(4px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(244, 67, 54, 0.1)';
+            e.currentTarget.style.transform = 'translateX(0)';
+          }}
+        >
+          <div className="d-flex align-items-center">
+            <div className="me-3" style={{ minWidth: '40px' }}>
               <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText 
-              primary="Logout" 
-              sx={{
-                '& .MuiListItemText-primary': {
-                  fontSize: '0.9rem',
-                  fontWeight: 500,
-                  color: '#f44336',
-                },
-              }}
-            />
-          </ListItemButton>
-        </ListItem>
-      </List>
-    </Drawer>
+            </div>
+            <span className="fw-medium" style={{ fontSize: '0.9rem' }}>Logout</span>
+          </div>
+        </button>
+      </div>
+    </div>
   );
 };
 

@@ -1,44 +1,23 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Card,
-  CardContent,
-  TextField,
-  Button,
-  Typography,
-  Alert,
-  CircularProgress,
-  InputAdornment,
-  IconButton,
-  Paper,
-  Container,
-} from '@mui/material';
-import {
-  Email as EmailIcon,
-  Lock as LockIcon,
-  Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon,
-  LocalCarWash as CarWashIcon,
-} from '@mui/icons-material';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LocalCarWash as CarWashIcon } from '@mui/icons-material';
 import { authAPI } from '../../services/api';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // Check if user is already logged in
+  useEffect(() => {
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      // User is already logged in, redirect to dashboard
+      navigate('/dashboard', { replace: true });
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,252 +25,133 @@ const Login: React.FC = () => {
     setError('');
 
     try {
-      const response = await authAPI.login(formData.email, formData.password);
-      
-      if (response.success && response.data) {
-        localStorage.setItem('adminToken', response.data.token);
+      const response = await authAPI.login(email, password);
+      if (response.success) {
         navigate('/dashboard');
       } else {
         setError(response.error || 'Login failed');
       }
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Login failed. Please try again.');
+    } catch (err) {
+      setError('An error occurred during login');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
+    <div className="min-vh-100 d-flex align-items-center justify-content-center" 
+         style={{
+           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+           position: 'relative',
+           overflow: 'hidden'
+         }}>
+      
       {/* Background Pattern */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: `
-            radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
-            radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%)
-          `,
-          zIndex: 1,
-        }}
-      />
+      <div className="position-absolute w-100 h-100" 
+           style={{
+             backgroundImage: `
+               radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
+               radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%)
+             `,
+             zIndex: 1
+           }} />
 
-      <Container maxWidth="sm" sx={{ position: 'relative', zIndex: 2 }}>
-        <Box sx={{ textAlign: 'center', mb: 4 }}>
-          <Box
-            sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 80,
-              height: 80,
-              borderRadius: '50%',
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              backdropFilter: 'blur(10px)',
-              mb: 2,
-            }}
-          >
-            <CarWashIcon sx={{ fontSize: 40, color: 'white' }} />
-          </Box>
-          <Typography 
-            variant="h3" 
-            component="h1" 
-            gutterBottom 
-            sx={{ 
-              fontWeight: 'bold', 
-              color: 'white',
-              textShadow: '0 2px 4px rgba(0,0,0,0.3)',
-              mb: 1,
-            }}
-          >
-            Winkshine
-          </Typography>
-          <Typography 
-            variant="h6" 
-            sx={{ 
-              color: 'rgba(255,255,255,0.9)',
-              fontWeight: 300,
-              mb: 3,
-            }}
-          >
-            Car Wash Management System
-          </Typography>
-        </Box>
+      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+        <div className="row justify-content-center">
+          <div className="col-md-6 col-lg-4">
+            
+            {/* Logo and Title */}
+            <div className="text-center mb-4">
+              <div className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
+                   style={{
+                     width: '80px',
+                     height: '80px',
+                     backgroundColor: 'rgba(255,255,255,0.2)',
+                     backdropFilter: 'blur(10px)'
+                   }}>
+                <CarWashIcon style={{ fontSize: '2.5rem', color: 'white' }} />
+              </div>
+              <h1 className="text-white fw-bold mb-2" 
+                  style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
+                Winkshine
+              </h1>
+              <h6 className="text-white-50 fw-light">
+                Car Wash Management System
+              </h6>
+            </div>
 
-        <Paper
-          elevation={24}
-          sx={{
-            borderRadius: 3,
-            overflow: 'hidden',
-            backdropFilter: 'blur(20px)',
-            backgroundColor: 'rgba(255,255,255,0.95)',
-            border: '1px solid rgba(255,255,255,0.2)',
-          }}
-        >
-          <Box
-            sx={{
-              background: 'linear-gradient(135deg, #1a237e 0%, #3949ab 100%)',
-              p: 3,
-              textAlign: 'center',
-            }}
-          >
-            <Typography variant="h5" sx={{ color: 'white', fontWeight: 'bold' }}>
-              Admin Login
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', mt: 1 }}>
-              Sign in to access your dashboard
-            </Typography>
-          </Box>
-
-          <CardContent sx={{ p: 4 }}>
-            {error && (
-              <Alert 
-                severity="error" 
-                sx={{ 
-                  mb: 3,
-                  borderRadius: 2,
-                  '& .MuiAlert-icon': { color: '#d32f2f' },
-                }}
-              >
-                {error}
-              </Alert>
-            )}
-
-            <Box component="form" onSubmit={handleSubmit}>
-              <TextField
-                fullWidth
-                label="Email Address"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                margin="normal"
-                required
-                autoComplete="email"
-                autoFocus
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <EmailIcon sx={{ color: '#1a237e' }} />
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 2,
-                    '&:hover fieldset': {
-                      borderColor: '#1a237e',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: '#1a237e',
-                    },
-                  },
-                }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Password"
-                name="password"
-                type={showPassword ? 'text' : 'password'}
-                value={formData.password}
-                onChange={handleChange}
-                margin="normal"
-                required
-                autoComplete="current-password"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LockIcon sx={{ color: '#1a237e' }} />
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowPassword(!showPassword)}
-                        edge="end"
-                        sx={{ color: '#1a237e' }}
-                      >
-                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 2,
-                    '&:hover fieldset': {
-                      borderColor: '#1a237e',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: '#1a237e',
-                    },
-                  },
-                }}
-              />
-
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{
-                  mt: 4,
-                  mb: 2,
-                  py: 1.5,
-                  borderRadius: 2,
-                  background: 'linear-gradient(135deg, #1a237e 0%, #3949ab 100%)',
-                  boxShadow: '0 4px 15px rgba(26, 35, 126, 0.3)',
-                  '&:hover': {
-                    background: 'linear-gradient(135deg, #0d47a1 0%, #1a237e 100%)',
-                    boxShadow: '0 6px 20px rgba(26, 35, 126, 0.4)',
-                    transform: 'translateY(-1px)',
-                  },
-                  transition: 'all 0.3s ease',
-                }}
-                disabled={loading}
-              >
-                {loading ? (
-                  <CircularProgress size={24} color="inherit" />
-                ) : (
-                  'Sign In to Dashboard'
+            {/* Login Form */}
+            <div className="card shadow-custom-lg border-0"
+                 style={{
+                   background: 'rgba(255,255,255,0.95)',
+                   backdropFilter: 'blur(20px)',
+                   borderRadius: '1rem'
+                 }}>
+              <div className="card-body p-4">
+                
+                {error && (
+                  <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                    {error}
+                    <button type="button" className="btn-close" onClick={() => setError('')}></button>
+                  </div>
                 )}
-              </Button>
-            </Box>
 
-            <Box sx={{ textAlign: 'center', mt: 3, p: 2, backgroundColor: '#f8f9fa', borderRadius: 2 }}>
-              <Typography variant="body2" color="textSecondary" sx={{ fontWeight: 'bold', mb: 1 }}>
-                Demo Credentials
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Email: admin@winkshine.com
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Password: admin123
-              </Typography>
-            </Box>
-          </CardContent>
-        </Paper>
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="email" className="form-label">Email Address</label>
+                    <input
+                      type="email"
+                      className="form-control form-control-lg"
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      required
+                    />
+                  </div>
 
-        <Box sx={{ textAlign: 'center', mt: 3 }}>
-          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
-            © 2024 Winkshine Car Wash. All rights reserved.
-          </Typography>
-        </Box>
-      </Container>
-    </Box>
+                  <div className="mb-4">
+                    <label htmlFor="password" className="form-label">Password</label>
+                    <input
+                      type="password"
+                      className="form-control form-control-lg"
+                      id="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter your password"
+                      required
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-lg w-100"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <div className="d-flex align-items-center justify-content-center">
+                        <div className="spinner-custom me-2"></div>
+                        Signing In...
+                      </div>
+                    ) : (
+                      'Sign In to Dashboard'
+                    )}
+                  </button>
+                </form>
+                
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="text-center mt-4">
+              <p className="text-white-50 mb-0">
+                © 2024 Winkshine Car Wash. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

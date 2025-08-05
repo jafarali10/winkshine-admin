@@ -1,48 +1,78 @@
 # Winkshine Admin Panel
 
-A modern React-based admin panel for managing the Winkshine Car Washing Service.
+A modern React-based admin panel for managing the Winkshine Car Wash Service. This is the frontend application that connects to the Winkshine Admin API.
 
-## 🚀 Features
+## Features
 
-- **Modern UI/UX**: Built with Material-UI for a professional look
-- **Responsive Design**: Works on desktop, tablet, and mobile
-- **Authentication**: Secure login system with JWT tokens
-- **Dashboard**: Real-time statistics and analytics
-- **User Management**: Complete user CRUD operations
-- **Service Management**: Manage car washing services
-- **Booking Management**: Handle customer bookings
-- **Review Management**: Moderate customer reviews
-- **Settings**: Business configuration and preferences
+- 🔐 JWT Authentication with API
+- 👥 User Management (Admin/User roles)
+- 📊 Dashboard with Analytics
+- 🎨 Material-UI Components
+- 📝 TypeScript Support
+- 🛡️ Security Features
 
-## 📋 Prerequisites
+## Prerequisites
 
-- Node.js (v16 or higher)
-- npm or yarn
-- Backend API running (winkshineBackend)
+1. **Node.js** - Version 16 or higher
+2. **Winkshine Admin API** - Backend API server running
+3. **npm** or **yarn**
 
-## 🛠️ Installation
+## Installation
 
-1. **Navigate to the admin panel directory**
-   ```bash
-   cd winkshine-admin
-   ```
-
-2. **Install dependencies**
+1. **Install dependencies:**
    ```bash
    npm install
    ```
 
-3. **Start the development server**
+2. **Start the Backend API:**
+   Make sure the Winkshine Admin API is running on port 5000:
+   ```bash
+   cd ../winkshine-admin-api
+   npm install
+   npm run dev
+   ```
+
+3. **Start the Frontend:**
    ```bash
    npm start
    ```
 
-4. **Open your browser**
-   Navigate to `http://localhost:3000`
+## Default Login Credentials
 
-## 🔧 Configuration
+After the backend API is initialized, you can login with:
 
-### Environment Variables
+- **Email**: `admin@winkshine.com`
+- **Password**: `admin123`
+
+## Project Structure
+
+```
+src/
+├── components/
+│   └── Layout/           # Layout components
+├── pages/
+│   ├── Auth/             # Authentication pages
+│   └── Dashboard/        # Dashboard pages
+├── services/
+│   └── api.ts            # API service for backend communication
+└── types/
+    └── index.ts          # TypeScript type definitions
+```
+
+## Available Scripts
+
+- `npm start` - Start development server
+- `npm run build` - Build for production
+- `npm test` - Run tests
+
+## API Integration
+
+The frontend connects to the backend API using:
+- **Base URL**: `http://localhost:5000/api` (configurable via `REACT_APP_API_URL`)
+- **Authentication**: JWT token in Authorization header
+- **Error Handling**: Automatic token refresh and logout
+
+## Environment Variables
 
 Create a `.env` file in the root directory:
 
@@ -50,146 +80,42 @@ Create a `.env` file in the root directory:
 REACT_APP_API_URL=http://localhost:5000/api
 ```
 
-### Backend Connection
+## Development
 
-Make sure your backend server is running on port 5000:
-```bash
-cd ../winkshineBackend
-npm run dev
-```
+### Adding New Features
+1. Create new components in `src/components/`
+2. Add new pages in `src/pages/`
+3. Update types in `src/types/index.ts`
+4. Add API functions in `src/services/api.ts`
 
-## 📱 Pages & Features
+### API Communication
+- All API calls go through `src/services/api.ts`
+- JWT tokens are automatically handled
+- Error handling is centralized
 
-### 🔐 Authentication
-- **Login Page**: Secure admin authentication
-- **Protected Routes**: Automatic redirect to login if not authenticated
-- **Token Management**: JWT token storage and validation
+## Production Deployment
 
-### 📊 Dashboard
-- **Statistics Cards**: Total users, bookings, revenue, etc.
-- **Recent Bookings**: Latest booking activities
-- **Quick Actions**: Fast access to common tasks
+1. Set `REACT_APP_API_URL` to your production API URL
+2. Build the application: `npm run build`
+3. Serve the build folder
 
-### 👥 User Management
-- **User List**: View all registered users
-- **User Details**: Individual user information
-- **Status Management**: Activate/deactivate users
-- **Role Management**: Assign admin/user roles
+## Troubleshooting
 
-### 🚗 Service Management
-- **Service List**: View all car washing services
-- **Add/Edit Services**: Create and modify services
-- **Pricing Management**: Set service prices
-- **Category Management**: Organize services by type
+### API Connection Issues
+1. Ensure the backend API is running on port 5000
+2. Check the `REACT_APP_API_URL` environment variable
+3. Verify CORS is configured on the backend
 
-### 📅 Booking Management
-- **Booking List**: View all customer bookings
-- **Status Updates**: Change booking status
-- **Filtering**: Filter by date, status, customer
-- **Today's Bookings**: Quick view of today's schedule
+### Authentication Issues
+1. Ensure the backend API is initialized with default admin user
+2. Check if the user exists and is active
+3. Verify email and password are correct
 
-### ⭐ Review Management
-- **Review List**: View all customer reviews
-- **Moderation**: Approve/hide inappropriate reviews
-- **Rating Analysis**: Customer satisfaction metrics
+### Build Issues
+1. Install dependencies: `npm install`
+2. Check TypeScript errors: `npm run build`
+3. Clear node_modules and reinstall if needed
 
-### ⚙️ Settings
-- **Business Hours**: Set operating hours
-- **Pricing Configuration**: Tax rates, discounts
-- **Notification Settings**: Email/SMS preferences
-- **General Info**: Business details
+## Related Projects
 
-## 🎨 UI Components
-
-### Layout
-- **Sidebar Navigation**: Easy navigation between sections
-- **Header**: User profile and notifications
-- **Responsive Design**: Mobile-friendly interface
-
-### Data Display
-- **Data Tables**: Sortable and filterable tables
-- **Cards**: Statistics and information cards
-- **Charts**: Visual data representation
-- **Forms**: User-friendly input forms
-
-## 🔒 Security Features
-
-- **JWT Authentication**: Secure token-based auth
-- **Protected Routes**: Route-level security
-- **API Interceptors**: Automatic token handling
-- **Error Handling**: Graceful error management
-
-## 🚀 Available Scripts
-
-- `npm start` - Start development server
-- `npm run build` - Build for production
-- `npm test` - Run tests
-- `npm run eject` - Eject from Create React App
-
-## 📁 Project Structure
-
-```
-src/
-├── components/          # Reusable UI components
-│   └── Layout/         # Layout components
-├── pages/              # Page components
-│   ├── Auth/           # Authentication pages
-│   ├── Dashboard/      # Dashboard page
-│   ├── Users/          # User management
-│   ├── Services/       # Service management
-│   ├── Bookings/       # Booking management
-│   ├── Reviews/        # Review management
-│   └── Settings/       # Settings page
-├── services/           # API service functions
-├── types/              # TypeScript type definitions
-├── utils/              # Utility functions
-└── App.tsx             # Main application component
-```
-
-## 🔌 API Integration
-
-The admin panel connects to the Winkshine backend API:
-
-- **Base URL**: `http://localhost:5000/api`
-- **Authentication**: JWT token in Authorization header
-- **Error Handling**: Automatic token refresh and logout
-- **Data Fetching**: React Query for efficient data management
-
-## 🎯 Demo Credentials
-
-For testing purposes:
-- **Email**: admin@winkshine.com
-- **Password**: admin123
-
-## 🛠️ Development
-
-### Adding New Pages
-1. Create component in `src/pages/`
-2. Add route in `src/App.tsx`
-3. Add navigation item in `src/components/Layout/Sidebar.tsx`
-
-### Styling
-- Use Material-UI components and theme
-- Follow the established color scheme
-- Maintain responsive design principles
-
-### API Integration
-- Add new API functions in `src/services/api.ts`
-- Use React Query for data fetching
-- Handle loading and error states
-
-## 📝 License
-
-This project is licensed under the MIT License.
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
-
-## 🆘 Support
-
-For support, contact the development team or create an issue in the repository. 
+- **winkshine-admin-api**: Backend API server with MongoDB integration 

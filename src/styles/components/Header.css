@@ -1,0 +1,90 @@
+/* Header Component Styles */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.header-toolbar {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.header-menu-button {
+  margin-right: 1rem;
+  background-color: rgba(26, 35, 126, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.header-menu-button:hover {
+  background-color: rgba(26, 35, 126, 0.2);
+}
+
+.header-brand {
+  flex-grow: 1;
+}
+
+.header-brand-title {
+  font-weight: bold;
+  color: #1a237e;
+}
+
+.header-brand-subtitle {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.75rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-notification-button {
+  background-color: rgba(26, 35, 126, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.header-notification-button:hover {
+  background-color: rgba(26, 35, 126, 0.2);
+}
+
+.header-status-chip {
+  background-color: #4caf50;
+  color: white;
+  font-size: 0.7rem;
+  height: 24px;
+}
+
+.header-status-chip .MuiChip-label {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.header-profile-button {
+  background-color: rgba(26, 35, 126, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.header-profile-button:hover {
+  background-color: rgba(26, 35, 126, 0.2);
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  .header-menu-button {
+    display: block;
+  }
+  
+  .header-brand-subtitle {
+    display: none;
+  }
+  
+  .header-actions {
+    gap: 0.5rem;
+  }
+} 

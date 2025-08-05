@@ -6,46 +6,9 @@ export interface User {
   phone?: string;
   address?: string;
   role: 'user' | 'admin';
+  status: 'active' | 'inactive';
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// Service types
-export interface Service {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  duration: number;
-  category: 'basic' | 'premium' | 'luxury';
-  isActive: boolean;
-  image?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// Booking types
-export interface Booking {
-  _id: string;
-  user: User;
-  service: Service;
-  scheduledDate: string;
-  status: 'pending' | 'confirmed' | 'in-progress' | 'completed' | 'cancelled';
-  totalAmount: number;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// Review types
-export interface Review {
-  _id: string;
-  user: User;
-  service: Service;
-  booking: Booking;
-  rating: number;
-  comment?: string;
+  isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -53,20 +16,13 @@ export interface Review {
 // Dashboard types
 export interface DashboardStats {
   totalUsers: number;
-  totalBookings: number;
   totalRevenue: number;
-  pendingBookings: number;
-  completedBookings: number;
-  cancelledBookings: number;
   monthlyStats: MonthlyStat[];
-  recentBookings: Booking[];
-  topServices: Service[];
   customerSatisfaction: number;
 }
 
 export interface MonthlyStat {
   month: string;
-  bookings: number;
   revenue: number;
 }
 
@@ -101,8 +57,6 @@ export interface BusinessSettings {
   notifications: {
     emailNotifications: boolean;
     smsNotifications: boolean;
-    bookingReminders: boolean;
-    reviewRequests: boolean;
   };
   general: {
     businessName: string;

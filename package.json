@@ -10,8 +10,11 @@
     "@mui/material": "^5.15.10",
     "@mui/x-charts": "^6.19.4",
     "@mui/x-data-grid": "^6.19.4",
+    "@popperjs/core": "^2.11.8",
     "@tanstack/react-query": "^5.17.9",
     "axios": "^1.6.2",
+    "bootstrap": "^5.3.7",
+    "bootstrap-icons": "^1.13.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.1",
@@ -20,9 +23,9 @@
     "web-vitals": "^3.5.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -44,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18"

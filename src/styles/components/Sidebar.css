@@ -1,0 +1,176 @@
+/* Sidebar Component Styles */
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.sidebar-paper {
+  width: 280px;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #1a237e 0%, #3949ab 100%);
+  color: white;
+  border: none;
+  box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+}
+
+.sidebar-header {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.sidebar-logo-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  margin-bottom: 1rem;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+.sidebar-logo-icon {
+  font-size: 1.75rem;
+  color: white;
+}
+
+.sidebar-brand-title {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.sidebar-brand-subtitle {
+  opacity: 0.8;
+  font-size: 0.75rem;
+}
+
+.sidebar-divider {
+  background-color: rgba(255,255,255,0.2);
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.sidebar-menu {
+  flex-grow: 1;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 1rem;
+}
+
+.sidebar-menu-item {
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-menu-button {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-menu-button:hover {
+  background-color: rgba(255,255,255,0.1);
+  transform: translateX(4px);
+}
+
+.sidebar-menu-button.selected {
+  background-color: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+}
+
+.sidebar-menu-button.selected:hover {
+  background-color: rgba(255,255,255,0.2);
+}
+
+.sidebar-menu-button.selected .sidebar-menu-icon {
+  color: white;
+}
+
+.sidebar-menu-button.selected .sidebar-menu-text {
+  font-weight: bold;
+}
+
+.sidebar-menu-icon {
+  color: rgba(255,255,255,0.8);
+  min-width: 40px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-menu-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.sidebar-menu-badge {
+  background-color: rgba(255,255,255,0.2);
+  color: white;
+  font-size: 0.7rem;
+  height: 20px;
+}
+
+.sidebar-menu-badge .MuiChip-label {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.sidebar-user-section {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sidebar-user-profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sidebar-user-avatar {
+  width: 40px;
+  height: 40px;
+  margin-right: 1rem;
+  background-color: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+.sidebar-user-info {
+  flex: 1;
+}
+
+.sidebar-user-name {
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
+.sidebar-user-role {
+  opacity: 0.8;
+  font-size: 0.75rem;
+}
+
+.sidebar-logout-section {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+}
+
+.sidebar-logout-button {
+  border-radius: 8px;
+  background-color: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  transition: all 0.3s ease;
+}
+
+.sidebar-logout-button:hover {
+  background-color: rgba(244, 67, 54, 0.2);
+  transform: translateX(4px);
+}
+
+.sidebar-logout-icon {
+  color: #f44336;
+  min-width: 40px;
+}
+
+.sidebar-logout-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #f44336;
+} 

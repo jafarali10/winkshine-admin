@@ -58,31 +58,6 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         {/* Right Side Actions */}
         <div className="navbar-nav ms-auto align-items-center">
           
-          {/* Notifications */}
-          <div className="nav-item me-3">
-            <button className="btn position-relative border-0 rounded-3"
-                    style={{ 
-                      backgroundColor: 'rgba(26, 35, 126, 0.1)',
-                      width: '40px',
-                      height: '40px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(26, 35, 126, 0.2)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(26, 35, 126, 0.1)';
-                    }}>
-              <NotificationsIcon style={{ fontSize: '1.2rem', color: '#1a237e' }} />
-              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                    style={{ fontSize: '0.6rem', padding: '0.25rem 0.4rem' }}>
-                4
-              </span>
-            </button>
-          </div>
-
           {/* Status Badge */}
           <div className="nav-item me-3">
             <span className="badge px-2 py-1 rounded-pill"

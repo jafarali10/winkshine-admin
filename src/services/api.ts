@@ -131,6 +131,24 @@ export const usersAPI = {
     }
   },
   
+  getRegularUsers: async (page = 1, limit = 10, search = '', status = 'all'): Promise<ApiResponse<User[]>> => {
+    try {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: limit.toString(),
+        search: search,
+        status: status
+      });
+      const response = await apiCall(`/users/list/regular?${params.toString()}`);
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch regular users'
+      };
+    }
+  },
+  
   getById: async (id: string): Promise<ApiResponse<User>> => {
     try {
       const response = await apiCall(`/users/${id}`);
@@ -186,6 +204,78 @@ export const usersAPI = {
       };
     }
   },
+  
+  bulkUpdateStatus: async (userIds: string[], status: 'active' | 'inactive'): Promise<ApiResponse> => {
+    try {
+      const response = await apiCall('/users/bulk/status', {
+        method: 'PATCH',
+        body: JSON.stringify({ userIds, status }),
+      });
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to update user statuses'
+      };
+    }
+  },
+  
+  bulkDelete: async (userIds: string[]): Promise<ApiResponse> => {
+    try {
+      const response = await apiCall('/users/bulk', {
+        method: 'DELETE',
+        body: JSON.stringify({ userIds }),
+      });
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to delete users'
+      };
+    }
+  },
+  
+  getStats: async (): Promise<ApiResponse> => {
+    try {
+      const response = await apiCall('/users/stats/overview');
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch user statistics'
+      };
+    }
+  },
+  
+  createUser: async (userData: { name: string; email: string; password: string; role?: 'user' | 'admin' }): Promise<ApiResponse<User>> => {
+    try {
+      const response = await apiCall('/users', {
+        method: 'POST',
+        body: JSON.stringify(userData),
+      });
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to create user'
+      };
+    }
+  },
+  
+  updateUser: async (id: string, userData: { name: string; email: string }): Promise<ApiResponse<User>> => {
+    try {
+      const response = await apiCall(`/users/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(userData),
+      });
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to update user'
+      };
+    }
+  },
 };
 
 export const settingsAPI = {
@@ -195,5 +285,45 @@ export const settingsAPI = {
   
   update: async (settings: Partial<BusinessSettings>): Promise<ApiResponse> => {
     return { success: true };
+  },
+};
+
+export const logoAPI = {
+  get: async (): Promise<ApiResponse<any>> => {
+    try {
+      const response = await apiCall('/logo');
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch logo'
+      };
+    }
+  },
+  
+  upload: async (formData: FormData): Promise<ApiResponse<any>> => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`${API_BASE_URL}/logo/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Upload failed');
+      }
+      
+      return data;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to upload logo'
+      };
+    }
   },
 }; 

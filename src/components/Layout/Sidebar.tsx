@@ -5,6 +5,7 @@ import {
   Settings as SettingsIcon,
   Logout as LogoutIcon,
   LocalCarWash as CarWashIcon,
+  Image as ImageIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -24,7 +25,13 @@ const menuItems = [
     text: 'Users', 
     icon: <PeopleIcon />, 
     path: '/users',
-    badge: '1.2K',
+    badge: null,
+  },
+  { 
+    text: 'Logo', 
+    icon: <ImageIcon />, 
+    path: '/logo',
+    badge: null,
   },
   { 
     text: 'Settings', 
@@ -134,9 +141,9 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
       
       <hr style={{ backgroundColor: 'rgba(255,255,255,0.2)', margin: '0 1rem' }} />
       
-      {/* User Profile */}
-      <div className="p-3 mb-3">
-        <div className="d-flex align-items-center mb-3">
+      {/* User Profile - moved to bottom */}
+      <div className="p-3 pt-0 pb-3" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%' }}>
+        <div className="d-flex align-items-center">
           <div className="rounded-circle bg-white bg-opacity-20 d-flex align-items-center justify-content-center me-3"
                style={{
                  width: '40px',
@@ -150,35 +157,6 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
             <small style={{ opacity: 0.8, fontSize: '0.75rem' }}>Super Admin</small>
           </div>
         </div>
-      </div>
-      
-      {/* Logout */}
-      <div className="px-3 pb-3">
-        <button
-          className="btn w-100 text-start border rounded-3"
-          onClick={handleLogout}
-          style={{
-            backgroundColor: 'rgba(244, 67, 54, 0.1)',
-            borderColor: 'rgba(244, 67, 54, 0.3)',
-            color: '#f44336',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(244, 67, 54, 0.2)';
-            e.currentTarget.style.transform = 'translateX(4px)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(244, 67, 54, 0.1)';
-            e.currentTarget.style.transform = 'translateX(0)';
-          }}
-        >
-          <div className="d-flex align-items-center">
-            <div className="me-3" style={{ minWidth: '40px' }}>
-              <LogoutIcon />
-            </div>
-            <span className="fw-medium" style={{ fontSize: '0.9rem' }}>Logout</span>
-          </div>
-        </button>
       </div>
     </div>
   );

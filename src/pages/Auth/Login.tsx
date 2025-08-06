@@ -52,6 +52,13 @@ const Login: React.FC = () => {
     try {
       const response = await authAPI.login(email, password);
       if (response.success) {
+        // Check if user has admin role
+        if (response.data?.user?.role !== 'admin') {
+          setError('Invalid email or password');
+          // Clear the token if it was stored
+          localStorage.removeItem('adminToken');
+          return;
+        }
         navigate('/dashboard');
       } else {
         setError(response.error || 'Login failed');
@@ -67,14 +74,14 @@ const Login: React.FC = () => {
   return (
     <div className="login-split-bg">
       <div className="login-split-left">
-        <div className="login-logo-left-container">
+        <div className="login-logo-circle-container login-logo-circle-left">
           {logoLoading ? (
             <div className="spinner-custom mx-auto" style={{ width: 96, height: 96 }}></div>
           ) : logo && !logoError ? (
             <img
               src={getLogoUrl(logo.image)}
               alt="Winkshine Logo"
-              className="login-logo-left-img"
+              className="login-logo-img-circle login-logo-img-left"
             />
           ) : (
             <div className="login-logo-fallback-large">Winkshine</div>
@@ -82,52 +89,56 @@ const Login: React.FC = () => {
         </div>
       </div>
       <div className="login-split-right d-flex align-items-center justify-content-center">
-        <div className="login-form-container login-form-premium-card">
+        <div className="login-form-container">
           <div className="login-logo-container text-center mb-4">
             {logoLoading ? (
               <div className="spinner-custom mx-auto" style={{ width: 64, height: 64 }}></div>
             ) : logo && !logoError ? (
-              <img
-                src={getLogoUrl(logo.image)}
-                alt="Winkshine Logo"
-                className="login-logo-img login-logo-img-large"
-              />
+              <div className="login-logo-circle-container">
+                <img
+                  src={getLogoUrl(logo.image)}
+                  alt="Winkshine Logo"
+                  className="login-logo-img-circle"
+                />
+              </div>
             ) : (
               <div className="login-logo-fallback">Winkshine</div>
             )}
           </div>
-          <form onSubmit={handleSubmit} className="login-form-fields login-form-premium-fields">
-            <div className="mb-4 position-relative">
-              <label htmlFor="email" className="form-label">Email</label>
-              <span className="input-icon"><Email fontSize="small" /></span>
+          <form onSubmit={handleSubmit} className="login-form-fields">
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">
+                <span className="label-icon"><Email fontSize="small" /></span>
+                Email
+              </label>
               <input
                 type="email"
-                className="form-control form-control-lg input-focus login-input-premium"
+                className="form-control form-control-lg input-focus"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 required
-                style={{ paddingLeft: '1.8rem' }}
               />
             </div>
-            <div className="mb-4 position-relative">
-              <label htmlFor="password" className="form-label">Password</label>
-              <span className="input-icon"><Lock fontSize="small" /></span>
+            <div className="mb-4">
+              <label htmlFor="password" className="form-label">
+                <span className="label-icon"><Lock fontSize="small" /></span>
+                Password
+              </label>
               <input
                 type="password"
-                className="form-control form-control-lg input-focus login-input-premium"
+                className="form-control form-control-lg input-focus"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 required
-                style={{ paddingLeft: '1.8rem' }}
               />
             </div>
             <button
               type="submit"
-              className="btn login-btn login-btn-premium btn-lg w-100"
+              className="btn login-btn btn-lg w-100"
               disabled={loading}
             >
               {loading ? (
@@ -136,12 +147,11 @@ const Login: React.FC = () => {
                   Signing In...
                 </div>
               ) : (
-                'Sign In to Dashboard'
+                'Sign In'
               )}
             </button>
-            <div className="d-flex justify-content-between align-items-center mt-3">
+            <div className="d-flex justify-content-start align-items-center mt-3">
               <a href="#" className="login-link">Forgot Password?</a>
-              <button type="button" className="signup-btn-premium">Sign Up</button>
             </div>
           </form>
           {error && (

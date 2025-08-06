@@ -21,7 +21,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       <main className="flex-grow-1"
             style={{
               marginLeft: '280px',
-              marginTop: '70px',
+              marginTop: '15px',
               backgroundColor: '#f8f9fa',
               minHeight: 'calc(100vh - 70px)',
               padding: '1.5rem'

@@ -90,6 +90,48 @@ export const authAPI = {
       };
     }
   },
+
+  verifyResetToken: async (token: string): Promise<ApiResponse> => {
+    try {
+      const response = await apiCall(`/auth/verify-reset-token/${token}`);
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to verify token'
+      };
+    }
+  },
+
+  updateProfile: async (userId: string, userData: { name: string; email: string }): Promise<ApiResponse<User>> => {
+    try {
+      const response = await apiCall('/auth/profile', {
+        method: 'PATCH',
+        body: JSON.stringify(userData),
+      });
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to update profile'
+      };
+    }
+  },
+
+  updatePassword: async (currentPassword: string, newPassword: string): Promise<ApiResponse> => {
+    try {
+      const response = await apiCall('/auth/change-password', {
+        method: 'POST',
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to update password'
+      };
+    }
+  },
 };
 
 export const dashboardAPI = {

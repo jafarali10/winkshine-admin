@@ -7,6 +7,7 @@ import Login from './pages/Auth/Login';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Users from './pages/Users/Users';
 import Logo from './pages/Logo/Logo';
+import MyProfile from './pages/Profile/MyProfile';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -66,6 +67,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Logo />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <MyProfile />
           </ProtectedRoute>
         }
       />

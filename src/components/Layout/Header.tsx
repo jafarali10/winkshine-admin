@@ -123,15 +123,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               </li>
               <li><hr className="dropdown-divider my-0" /></li>
               <li>
-                <button className="dropdown-item py-2 px-3">
+                <button className="dropdown-item py-2 px-3" onClick={() => navigate('/profile')}>
                   <i className="bi bi-person me-2"></i>
                   <span style={{ fontSize: '0.85rem' }}>My Profile</span>
-                </button>
-              </li>
-              <li>
-                <button className="dropdown-item py-2 px-3">
-                  <i className="bi bi-gear me-2"></i>
-                  <span style={{ fontSize: '0.85rem' }}>Settings</span>
                 </button>
               </li>
               <li><hr className="dropdown-divider my-0" /></li>

@@ -6,6 +6,7 @@ import {
   Logout as LogoutIcon,
   LocalCarWash as CarWashIcon,
   Image as ImageIcon,
+  Person as PersonIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -31,12 +32,6 @@ const menuItems = [
     text: 'Logo', 
     icon: <ImageIcon />, 
     path: '/logo',
-    badge: null,
-  },
-  { 
-    text: 'Settings', 
-    icon: <SettingsIcon />, 
-    path: '/settings',
     badge: null,
   },
 ];
@@ -139,8 +134,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
         </ul>
       </div>
       
-      <hr style={{ backgroundColor: 'rgba(255,255,255,0.2)', margin: '0 1rem' }} />
-      
+          
       {/* User Profile - moved to bottom */}
       <div className="p-3 pt-0 pb-3" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%' }}>
         <div className="d-flex align-items-center">

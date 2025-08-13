@@ -1,6 +1,6 @@
 {
   "short_name": "Winkshine Admin",
-  "name": "Winkshine Car Washing Service Admin Panel",
+  "name": "Winkshine Car Wash Admin Panel",
   "icons": [
     {
       "src": "favicon.ico",
@@ -12,4 +12,4 @@
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
-} 
+}

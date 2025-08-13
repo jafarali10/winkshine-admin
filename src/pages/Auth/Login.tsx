@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { LocalCarWash as CarWashIcon, Email, Lock } from '@mui/icons-material';
 import { authAPI } from '../../services/api';
 import { logoAPI } from '../../services/api';
+import { useUser } from '../../contexts/UserContext';
 import './Login.css';
 
 const getLogoUrl = (imagePath: string) => `http://localhost:5000${imagePath}`;
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { setUser } = useUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -59,6 +61,8 @@ const Login: React.FC = () => {
           localStorage.removeItem('adminToken');
           return;
         }
+        // Set user in context
+        setUser(response.data.user);
         navigate('/dashboard');
       } else {
         setError(response.error || 'Login failed');

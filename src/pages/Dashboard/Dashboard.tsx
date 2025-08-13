@@ -1,27 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   People as PeopleIcon,
-  AttachMoney as RevenueIcon,
-  TrendingUp as TrendingUpIcon,
-  LocalCarWash as CarWashIcon,
-  Star as StarIcon,
 } from '@mui/icons-material';
 import { DashboardStats } from '../../types';
+import { dashboardAPI } from '../../services/api';
 
 interface StatCardProps {
   title: string;
   value: string | number;
   icon: React.ReactNode;
   color: string;
+  loading?: boolean;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => (
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, loading = false }) => (
   <div className="card h-100 border-0 shadow-custom">
     <div className="card-body p-4">
       <div className="d-flex align-items-center justify-content-between">
         <div className="flex-grow-1">
           <h6 className="text-muted mb-2 fw-semibold">{title}</h6>
-          <h2 className="fw-bold mb-0" style={{ color: color }}>{value}</h2>
+          <h2 className="fw-bold mb-0" style={{ color: color }}>
+            {loading ? (
+              <div className="spinner-border spinner-border-sm me-2" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              typeof value === 'number' ? value.toLocaleString() : value
+            )}
+          </h2>
         </div>
         <div className="d-flex align-items-center justify-content-center rounded-circle"
              style={{
@@ -40,13 +46,32 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => (
 );
 
 const Dashboard: React.FC = () => {
-  // Mock data - replace with actual API call
-  const stats: DashboardStats = {
-    totalUsers: 1250,
-    totalRevenue: 45600,
-    monthlyStats: [],
-    customerSatisfaction: 4.5,
-  };
+  const [stats, setStats] = useState<DashboardStats>({
+    totalUsers: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDashboardStats = async () => {
+      try {
+        setLoading(true);
+        const response = await dashboardAPI.getStats();
+        if (response.success && response.data) {
+          setStats(response.data);
+        } else {
+          setError(response.error || 'Failed to fetch dashboard stats');
+        }
+      } catch (err) {
+        setError('An error occurred while fetching dashboard stats');
+        console.error('Dashboard stats error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardStats();
+  }, []);
 
   return (
     <div className="container-fluid p-4">
@@ -62,19 +87,29 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
+      {/* Error Message */}
+      {error && (
+        <div className="row mb-4">
+          <div className="col-12">
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Stats Cards */}
       <div className="row g-4 mb-4">
-                 <div className="col-12 col-sm-6 col-lg-3">
-           <StatCard
-             title="Total Users"
-             value={stats.totalUsers.toLocaleString()}
-             icon={<PeopleIcon />}
-             color="#2196f3"
-           />
-         </div>
+        <div className="col-12 col-sm-6 col-lg-3">
+          <StatCard
+            title="Total Users"
+            value={stats.totalUsers}
+            icon={<PeopleIcon />}
+            color="#2196f3"
+            loading={loading}
+          />
+        </div>
       </div>
-
-      
     </div>
   );
 };

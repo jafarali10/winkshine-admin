@@ -8,16 +8,20 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import Users from './pages/Users/Users';
 import Logo from './pages/Logo/Logo';
 import MyProfile from './pages/Profile/MyProfile';
+import Categorys from './pages/Category/Category';
+
+// Context
+import { UserProvider } from './contexts/UserContext';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const token = localStorage.getItem('adminToken');
-  
+
   if (!token) {
     // No token found, redirect to login
     return <Navigate to="/login" replace />;
   }
-  
+
   // Token exists, render the protected content
   return <MainLayout>{children}</MainLayout>;
 };
@@ -25,69 +29,29 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 // Public Route Component (for login page)
 const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const token = localStorage.getItem('adminToken');
-  
+
   if (token) {
     // User is already logged in, redirect to dashboard
     return <Navigate to="/dashboard" replace />;
   }
-  
+
   // No token, show login page
   return <>{children}</>;
 };
 
 function App() {
   return (
-    <Routes>
-      <Route 
-        path="/login" 
-        element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        } 
-      />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/users"
-        element={
-          <ProtectedRoute>
-            <Users />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/logo"
-        element={
-          <ProtectedRoute>
-            <Logo />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <MyProfile />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/settings"
-        element={
-          <ProtectedRoute>
-            <div>Settings Page - Coming Soon</div>
-          </ProtectedRoute>
-        }
-      />
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-    </Routes>
+    <UserProvider>
+      <Routes>
+        <Route path="/login" element={<PublicRoute> <Login /> </PublicRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /> </ProtectedRoute>} />
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        \<Route path="/users" element={<ProtectedRoute> <Users /> </ProtectedRoute>} />
+        <Route path="/logo" element={<ProtectedRoute> <Logo /> </ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute> <MyProfile /> </ProtectedRoute>} />
+        <Route path="/category" element={<ProtectedRoute> <Categorys /> </ProtectedRoute>} />
+      </Routes>
+    </UserProvider>
   );
 }
 

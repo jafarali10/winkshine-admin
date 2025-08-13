@@ -1,12 +1,12 @@
 // API service for connecting to the backend API
-import { ApiResponse, User, DashboardStats, BusinessSettings } from '../types';
+import { ApiResponse, User, DashboardStats, BusinessSettings, Category } from '../types';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 // Helper function to make API calls
 const apiCall = async (endpoint: string, options: RequestInit = {}): Promise<any> => {
   const token = localStorage.getItem('adminToken');
-  
+
   const config: RequestInit = {
     headers: {
       'Content-Type': 'application/json',
@@ -19,11 +19,11 @@ const apiCall = async (endpoint: string, options: RequestInit = {}): Promise<any
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
     const data = await response.json();
-    
+
     if (!response.ok) {
       throw new Error(data.error || 'API request failed');
     }
-    
+
     return data;
   } catch (error) {
     console.error('API call error:', error);
@@ -38,12 +38,12 @@ export const authAPI = {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       });
-      
+
       if (response.success && response.data) {
         // Store token in localStorage
         localStorage.setItem('adminToken', response.data.token);
       }
-      
+
       return response;
     } catch (error) {
       return {
@@ -52,12 +52,12 @@ export const authAPI = {
       };
     }
   },
-  
+
   logout: async (): Promise<ApiResponse> => {
     localStorage.removeItem('adminToken');
     return { success: true };
   },
-  
+
   getCurrentUser: async (): Promise<ApiResponse<User>> => {
     try {
       const response = await apiCall('/auth/me');
@@ -76,12 +76,12 @@ export const authAPI = {
         method: 'POST',
         body: JSON.stringify({ name, email, password, role }),
       });
-      
+
       if (response.success && response.data) {
         // Store token in localStorage
         localStorage.setItem('adminToken', response.data.token);
       }
-      
+
       return response;
     } catch (error) {
       return {
@@ -146,18 +146,6 @@ export const dashboardAPI = {
       };
     }
   },
-  
-  getRecentActivity: async (): Promise<ApiResponse> => {
-    try {
-      const response = await apiCall('/dashboard/recent-activity');
-      return response;
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Failed to fetch recent activity'
-      };
-    }
-  },
 };
 
 export const usersAPI = {
@@ -172,7 +160,7 @@ export const usersAPI = {
       };
     }
   },
-  
+
   getRegularUsers: async (page = 1, limit = 10, search = '', status = 'all'): Promise<ApiResponse<User[]>> => {
     try {
       const params = new URLSearchParams({
@@ -190,7 +178,7 @@ export const usersAPI = {
       };
     }
   },
-  
+
   getById: async (id: string): Promise<ApiResponse<User>> => {
     try {
       const response = await apiCall(`/users/${id}`);
@@ -202,7 +190,7 @@ export const usersAPI = {
       };
     }
   },
-  
+
   updateStatus: async (id: string, status: 'active' | 'inactive'): Promise<ApiResponse> => {
     try {
       const response = await apiCall(`/users/${id}/status`, {
@@ -217,7 +205,7 @@ export const usersAPI = {
       };
     }
   },
-  
+
   updateRole: async (id: string, role: 'user' | 'admin'): Promise<ApiResponse> => {
     try {
       const response = await apiCall(`/users/${id}/role`, {
@@ -232,7 +220,7 @@ export const usersAPI = {
       };
     }
   },
-  
+
   delete: async (id: string): Promise<ApiResponse> => {
     try {
       const response = await apiCall(`/users/${id}`, {
@@ -246,7 +234,7 @@ export const usersAPI = {
       };
     }
   },
-  
+
   bulkUpdateStatus: async (userIds: string[], status: 'active' | 'inactive'): Promise<ApiResponse> => {
     try {
       const response = await apiCall('/users/bulk/status', {
@@ -261,7 +249,7 @@ export const usersAPI = {
       };
     }
   },
-  
+
   bulkDelete: async (userIds: string[]): Promise<ApiResponse> => {
     try {
       const response = await apiCall('/users/bulk', {
@@ -276,7 +264,7 @@ export const usersAPI = {
       };
     }
   },
-  
+
   getStats: async (): Promise<ApiResponse> => {
     try {
       const response = await apiCall('/users/stats/overview');
@@ -288,7 +276,7 @@ export const usersAPI = {
       };
     }
   },
-  
+
   createUser: async (userData: { name: string; email: string; password: string; role?: 'user' | 'admin' }): Promise<ApiResponse<User>> => {
     try {
       const response = await apiCall('/users', {
@@ -303,7 +291,7 @@ export const usersAPI = {
       };
     }
   },
-  
+
   updateUser: async (id: string, userData: { name: string; email: string }): Promise<ApiResponse<User>> => {
     try {
       const response = await apiCall(`/users/${id}`, {
@@ -320,16 +308,6 @@ export const usersAPI = {
   },
 };
 
-export const settingsAPI = {
-  get: async (): Promise<ApiResponse<BusinessSettings>> => {
-    return { success: true, data: {} as BusinessSettings };
-  },
-  
-  update: async (settings: Partial<BusinessSettings>): Promise<ApiResponse> => {
-    return { success: true };
-  },
-};
-
 export const logoAPI = {
   get: async (): Promise<ApiResponse<any>> => {
     try {
@@ -342,7 +320,7 @@ export const logoAPI = {
       };
     }
   },
-  
+
   upload: async (formData: FormData): Promise<ApiResponse<any>> => {
     try {
       const token = localStorage.getItem('adminToken');
@@ -353,13 +331,13 @@ export const logoAPI = {
         },
         body: formData,
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Upload failed');
       }
-      
+
       return data;
     } catch (error) {
       return {
@@ -368,4 +346,86 @@ export const logoAPI = {
       };
     }
   },
-}; 
+};
+
+export const categoryAPI = {
+
+  getAllCategory: async (page = 1, limit = 10, search = '', status = 'all'): Promise<ApiResponse<Category[]>> => {
+    try {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: limit.toString(),
+        search: search,
+        status: status
+      });
+      const response = await apiCall(`/category?${params.toString()}`);
+      console.log("Response of api --> ", response)
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch category'
+      };
+    }
+  },
+
+  updateStatus: async (id: string, status: 'active' | 'inactive'): Promise<ApiResponse> => {
+    try {
+      const response = await apiCall(`/category/${id}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status }),
+      });
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to update user status'
+      };
+    }
+  },
+
+  createCategory: async (categoryData: { name: string; }): Promise<ApiResponse<Category>> => {
+    try {
+      const response = await apiCall('/category', {
+        method: 'POST',
+        body: JSON.stringify(categoryData),
+      });
+      console.log("Create catogery response --> ", response)
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to create category'
+      };
+    }
+  },
+
+  updateCategory: async (id: string, categoryData: { name: string; }): Promise<ApiResponse<User>> => {
+    try {
+      const response = await apiCall(`/category/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(categoryData),
+      });
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to update user'
+      };
+    }
+  },
+
+  delete: async (id: string): Promise<ApiResponse> => {
+    try {
+      const response = await apiCall(`/category/${id}`, {
+        method: 'DELETE',
+      });
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to delete user'
+      };
+    }
+  },
+}

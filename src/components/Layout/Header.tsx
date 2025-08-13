@@ -1,10 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Notifications as NotificationsIcon,
   AccountCircle as AccountCircleIcon,
   Menu as MenuIcon,
 } from '@mui/icons-material';
+import { useUser } from '../../contexts/UserContext';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -12,9 +12,11 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const navigate = useNavigate();
+  const { user, setUser } = useUser();
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
+    setUser(null);
     navigate('/login');
   };
 
@@ -95,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 <AccountCircleIcon style={{ color: 'white', fontSize: '1.2rem' }} />
               </div>
               <span className="d-none d-md-block fw-medium" style={{ color: '#1a237e' }}>
-                Admin
+                {user?.name || 'Admin'}
               </span>
             </button>
             
@@ -114,10 +116,10 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                     <AccountCircleIcon style={{ color: 'white', fontSize: '1.5rem' }} />
                   </div>
                   <h6 className="fw-bold text-primary mb-1" style={{ fontSize: '0.9rem' }}>
-                    Admin User
+                    {user?.name || 'Admin User'}
                   </h6>
                   <small className="text-muted" style={{ fontSize: '0.75rem' }}>
-                    Super Administrator
+                    {user?.role === 'admin' ? 'Admin' : 'User'}
                   </small>
                 </div>
               </li>

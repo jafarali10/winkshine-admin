@@ -31,7 +31,7 @@ const Users: React.FC = () => {
     password: '',
     confirmPassword: ''
   });
-  const [addUserErrors, setAddUserErrors] = useState<{[key: string]: string}>({});
+  const [addUserErrors, setAddUserErrors] = useState<{ [key: string]: string }>({});
   const [showEditModal, setShowEditModal] = useState(false);
   const [editUserLoading, setEditUserLoading] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
@@ -40,7 +40,7 @@ const Users: React.FC = () => {
     email: '',
     status: 'active' as 'active' | 'inactive'
   });
-  const [editUserErrors, setEditUserErrors] = useState<{[key: string]: string}>({});
+  const [editUserErrors, setEditUserErrors] = useState<{ [key: string]: string }>({});
   const [totalUsers, setTotalUsers] = useState(0);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const Users: React.FC = () => {
     if ((window as any).searchTimeout) {
       clearTimeout((window as any).searchTimeout);
     }
-    
+
     // Trigger search after a small delay
     (window as any).searchTimeout = setTimeout(() => {
       fetchUsers(1);
@@ -65,14 +65,14 @@ const Users: React.FC = () => {
       setLoading(true);
       setError(null);
       const response = await usersAPI.getRegularUsers(page, itemsPerPage, searchTerm, filterStatus);
-      
+
       console.log('API Response:', response); // Debug log
-      
+
       if (response.success && response.data) {
         // Handle both direct array and nested users object
         let usersData: User[] = [];
         let totalUsersCount = 0;
-        
+
         if (Array.isArray(response.data)) {
           usersData = response.data;
         } else if (typeof response.data === 'object' && response.data !== null && 'users' in response.data && Array.isArray((response.data as any).users)) {
@@ -81,7 +81,7 @@ const Users: React.FC = () => {
             totalUsersCount = (response.data as any).pagination.total;
           }
         }
-        
+
         console.log('Users Data:', usersData); // Debug log
         setUsers(usersData);
         setTotalUsers(totalUsersCount);
@@ -141,7 +141,7 @@ const Users: React.FC = () => {
   const handleDeleteUser = async (userId: string) => {
     const userToDelete = users.find(user => user._id === userId);
     const userName = userToDelete ? userToDelete.name : 'this user';
-    
+
     if (window.confirm(`Are you sure you want to delete ${userName}? This action cannot be undone.`)) {
       setActionLoading(userId);
       try {
@@ -163,28 +163,28 @@ const Users: React.FC = () => {
   };
 
   const validateForm = () => {
-    const errors: {[key: string]: string} = {};
-    
+    const errors: { [key: string]: string } = {};
+
     if (!addUserForm.name.trim()) {
       errors.name = 'Name is required';
     }
-    
+
     if (!addUserForm.email.trim()) {
       errors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(addUserForm.email)) {
       errors.email = 'Please enter a valid email';
     }
-    
+
     if (!addUserForm.password) {
       errors.password = 'Password is required';
     } else if (addUserForm.password.length < 6) {
       errors.password = 'Password must be at least 6 characters';
     }
-    
+
     if (addUserForm.password !== addUserForm.confirmPassword) {
       errors.confirmPassword = 'Passwords do not match';
     }
-    
+
     setAddUserErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -213,10 +213,10 @@ const Users: React.FC = () => {
         });
         setAddUserErrors({});
         setShowAddModal(false);
-        
+
         // Refresh user list
         fetchUsers();
-        
+
         // Show success message
         alert('User created successfully!');
       } else {
@@ -235,7 +235,7 @@ const Users: React.FC = () => {
       ...prev,
       [field]: value
     }));
-    
+
     // Clear error when user starts typing
     if (addUserErrors[field]) {
       setAddUserErrors(prev => ({
@@ -279,18 +279,18 @@ const Users: React.FC = () => {
   };
 
   const validateEditForm = () => {
-    const errors: {[key: string]: string} = {};
-    
+    const errors: { [key: string]: string } = {};
+
     if (!editUserForm.name.trim()) {
       errors.name = 'Name is required';
     }
-    
+
     if (!editUserForm.email.trim()) {
       errors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(editUserForm.email)) {
       errors.email = 'Please enter a valid email';
     }
-    
+
     setEditUserErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -303,21 +303,21 @@ const Users: React.FC = () => {
     setEditUserLoading(true);
     try {
       let hasChanges = false;
-      
+
       // Update name and email if changed
       if (editUserForm.name !== editingUser.name || editUserForm.email !== editingUser.email) {
         const updateResponse = await usersAPI.updateUser(editingUser._id, {
           name: editUserForm.name.trim(),
           email: editUserForm.email.trim()
         });
-        
+
         if (!updateResponse.success) {
           alert(updateResponse.error || 'Failed to update user details. Please try again.');
           return;
         }
         hasChanges = true;
       }
-      
+
       // Update status if changed
       if (editUserForm.status !== editingUser.status) {
         const statusResponse = await usersAPI.updateStatus(editingUser._id, editUserForm.status);
@@ -337,10 +337,10 @@ const Users: React.FC = () => {
         status: 'active'
       });
       setEditUserErrors({});
-      
+
       // Refresh user list
       fetchUsers();
-      
+
       // Show success message
       if (hasChanges) {
         alert('User updated successfully!');
@@ -360,7 +360,7 @@ const Users: React.FC = () => {
       ...prev,
       [field]: value
     }));
-    
+
     // Clear error when user starts typing
     if (editUserErrors[field]) {
       setEditUserErrors(prev => ({
@@ -393,7 +393,7 @@ const Users: React.FC = () => {
                 Manage all regular users in the system
               </p>
             </div>
-            <button 
+            <button
               className="btn btn-primary d-flex align-items-center"
               onClick={openAddModal}
             >
@@ -413,7 +413,7 @@ const Users: React.FC = () => {
                 {/* Search */}
                 <div className="col-md-4">
                   <div className="position-relative">
-                    <SearchIcon 
+                    <SearchIcon
                       className="position-absolute top-50 start-0 translate-middle-y ms-3"
                       style={{ color: '#6c757d', fontSize: '1.2rem' }}
                     />
@@ -498,7 +498,7 @@ const Users: React.FC = () => {
                   </div>
                   <h5 className="text-danger mb-2">Error Loading Users</h5>
                   <p className="text-muted mb-3">{error}</p>
-                  <button 
+                  <button
                     className="btn btn-primary"
                     onClick={() => fetchUsers()}
                   >
@@ -535,7 +535,7 @@ const Users: React.FC = () => {
                               <td className="px-4 py-3">
                                 <div className="d-flex align-items-center">
                                   <div className="rounded-circle bg-primary d-flex align-items-center justify-content-center me-3"
-                                       style={{ width: '40px', height: '40px' }}>
+                                    style={{ width: '40px', height: '40px' }}>
                                     <span className="text-white fw-bold">
                                       {user.name.charAt(0).toUpperCase()}
                                     </span>
@@ -643,7 +643,7 @@ const Users: React.FC = () => {
                               Previous
                             </button>
                           </li>
-                          
+
                           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                             <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
                               <button
@@ -654,7 +654,7 @@ const Users: React.FC = () => {
                               </button>
                             </li>
                           ))}
-                          
+
                           <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                             <button
                               className="page-link"
@@ -677,10 +677,10 @@ const Users: React.FC = () => {
 
       {/* Add User Modal */}
       {showAddModal && (
-        <div 
-          className="modal fade show" 
-          style={{ 
-            display: 'block', 
+        <div
+          className="modal fade show"
+          style={{
+            display: 'block',
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             position: 'fixed',
             top: 0,
@@ -688,7 +688,7 @@ const Users: React.FC = () => {
             width: '100%',
             height: '100%',
             zIndex: 1050
-          }} 
+          }}
           tabIndex={-1}
         >
           <div className="modal-dialog modal-dialog-centered" style={{ maxWidth: '500px' }}>
@@ -737,7 +737,7 @@ const Users: React.FC = () => {
                       value={addUserForm.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
                       disabled={addUserLoading}
-                      style={{ 
+                      style={{
                         borderRadius: '8px',
                         border: addUserErrors.name ? '1px solid #dc3545' : '1px solid #dee2e6',
                         padding: '0.75rem 1rem'
@@ -763,7 +763,7 @@ const Users: React.FC = () => {
                       value={addUserForm.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
                       disabled={addUserLoading}
-                      style={{ 
+                      style={{
                         borderRadius: '8px',
                         border: addUserErrors.email ? '1px solid #dc3545' : '1px solid #dee2e6',
                         padding: '0.75rem 1rem'
@@ -789,7 +789,7 @@ const Users: React.FC = () => {
                       value={addUserForm.password}
                       onChange={(e) => handleInputChange('password', e.target.value)}
                       disabled={addUserLoading}
-                      style={{ 
+                      style={{
                         borderRadius: '8px',
                         border: addUserErrors.password ? '1px solid #dc3545' : '1px solid #dee2e6',
                         padding: '0.75rem 1rem'
@@ -815,7 +815,7 @@ const Users: React.FC = () => {
                       value={addUserForm.confirmPassword}
                       onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                       disabled={addUserLoading}
-                      style={{ 
+                      style={{
                         borderRadius: '8px',
                         border: addUserErrors.confirmPassword ? '1px solid #dc3545' : '1px solid #dee2e6',
                         padding: '0.75rem 1rem'
@@ -835,7 +835,7 @@ const Users: React.FC = () => {
                       className="btn btn-outline-secondary"
                       onClick={closeAddModal}
                       disabled={addUserLoading}
-                      style={{ 
+                      style={{
                         borderRadius: '8px',
                         padding: '0.75rem 1.5rem',
                         fontWeight: '500'
@@ -847,7 +847,7 @@ const Users: React.FC = () => {
                       type="submit"
                       className="btn btn-primary"
                       disabled={addUserLoading}
-                      style={{ 
+                      style={{
                         borderRadius: '8px',
                         padding: '0.75rem 1.5rem',
                         fontWeight: '500',
@@ -873,10 +873,10 @@ const Users: React.FC = () => {
 
       {/* Edit User Modal */}
       {showEditModal && editingUser && (
-        <div 
-          className="modal fade show" 
-          style={{ 
-            display: 'block', 
+        <div
+          className="modal fade show"
+          style={{
+            display: 'block',
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             position: 'fixed',
             top: 0,
@@ -884,7 +884,7 @@ const Users: React.FC = () => {
             width: '100%',
             height: '100%',
             zIndex: 1050
-          }} 
+          }}
           tabIndex={-1}
         >
           <div className="modal-dialog modal-dialog-centered" style={{ maxWidth: '500px' }}>
@@ -933,7 +933,7 @@ const Users: React.FC = () => {
                       value={editUserForm.name}
                       onChange={(e) => handleEditInputChange('name', e.target.value)}
                       disabled={editUserLoading}
-                      style={{ 
+                      style={{
                         borderRadius: '8px',
                         border: editUserErrors.name ? '1px solid #dc3545' : '1px solid #dee2e6',
                         padding: '0.75rem 1rem'
@@ -959,7 +959,7 @@ const Users: React.FC = () => {
                       value={editUserForm.email}
                       onChange={(e) => handleEditInputChange('email', e.target.value)}
                       disabled={editUserLoading}
-                      style={{ 
+                      style={{
                         borderRadius: '8px',
                         border: editUserErrors.email ? '1px solid #dc3545' : '1px solid #dee2e6',
                         padding: '0.75rem 1rem'
@@ -983,7 +983,7 @@ const Users: React.FC = () => {
                       value={editUserForm.status}
                       onChange={(e) => handleEditInputChange('status', e.target.value)}
                       disabled={editUserLoading}
-                      style={{ 
+                      style={{
                         borderRadius: '8px',
                         border: '1px solid #dee2e6',
                         padding: '0.75rem 1rem'
@@ -1001,7 +1001,7 @@ const Users: React.FC = () => {
                       className="btn btn-outline-secondary"
                       onClick={closeEditModal}
                       disabled={editUserLoading}
-                      style={{ 
+                      style={{
                         borderRadius: '8px',
                         padding: '0.75rem 1.5rem',
                         fontWeight: '500'
@@ -1013,7 +1013,7 @@ const Users: React.FC = () => {
                       type="submit"
                       className="btn btn-primary"
                       disabled={editUserLoading}
-                      style={{ 
+                      style={{
                         borderRadius: '8px',
                         padding: '0.75rem 1.5rem',
                         fontWeight: '500',

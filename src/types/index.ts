@@ -3,8 +3,6 @@ export interface User {
   _id: string;
   name: string;
   email: string;
-  phone?: string;
-  address?: string;
   role: 'user' | 'admin';
   status: 'active' | 'inactive';
   isActive: boolean;
@@ -13,12 +11,18 @@ export interface User {
   updatedAt: string;
 }
 
+export interface Category extends Document {
+  _id : string;
+  name: string;
+  isDeleted: boolean;
+  status: 'active' | 'inactive';
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 // Dashboard types
 export interface DashboardStats {
   totalUsers: number;
-  totalRevenue: number;
-  monthlyStats: MonthlyStat[];
-  customerSatisfaction: number;
 }
 
 export interface MonthlyStat {

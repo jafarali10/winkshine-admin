@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Category,
   People as PeopleIcon,
 } from '@mui/icons-material';
 import { DashboardStats } from '../../types';
@@ -48,6 +49,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, loading 
 const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats>({
     totalUsers: 0,
+    totalCategories : 0
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -74,7 +76,7 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <div className="container-fluid p-4">
+    <div className="container-fluid">
       {/* Header */}
       <div className="row mb-4">
         <div className="col-12">
@@ -109,7 +111,20 @@ const Dashboard: React.FC = () => {
             loading={loading}
           />
         </div>
+
+        <div className="col-12 col-sm-6 col-lg-3">
+          <StatCard
+            title="Total Category"
+            value={stats.totalCategories}
+            icon={<Category />}
+            color="#2196f3"
+            loading={loading}
+          />
+        </div>
       </div>
+      
+
+      
     </div>
   );
 };

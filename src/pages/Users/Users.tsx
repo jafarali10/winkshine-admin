@@ -381,8 +381,8 @@ const Users: React.FC = () => {
     setEditUserErrors({});
   };
 
-  return (
-    <div className="container-fluid p-4">
+      return (
+        <div className="container-fluid">
       {/* Header */}
       <div className="row mb-4">
         <div className="col-12">

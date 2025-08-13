@@ -23,6 +23,7 @@ export interface Category extends Document {
 // Dashboard types
 export interface DashboardStats {
   totalUsers: number;
+  totalCategories : number
 }
 
 export interface MonthlyStat {
